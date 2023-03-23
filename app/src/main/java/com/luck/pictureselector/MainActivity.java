@@ -1411,7 +1411,7 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
             Uri destinationUri = Uri.fromFile(
                     new File(outputCropPath, DateUtils.getCreateFileName("CROP_") + ".jpeg"));
             UCrop uCrop = UCrop.of(inputUri, destinationUri);
-            options.setHideBottomControls(false);
+        //    options.setHideBottomControls(false);
             uCrop.withOptions(options);
             uCrop.setImageEngine(new UCropImageEngine() {
                 @Override
