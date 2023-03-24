@@ -194,6 +194,9 @@ public class LocalMedia implements Parcelable {
      */
     private boolean isEditorImage;
 
+
+    private LocalMediaStatus mediaStatus;
+
     public LocalMedia() {
     }
 
@@ -232,6 +235,7 @@ public class LocalMedia implements Parcelable {
         isMaxSelectEnabledMask = in.readByte() != 0;
         isGalleryEnabledMask = in.readByte() != 0;
         isEditorImage = in.readByte() != 0;
+        mediaStatus = in.readParcelable(LocalMediaStatus.class.getClassLoader());
     }
 
     @Override
@@ -270,6 +274,7 @@ public class LocalMedia implements Parcelable {
         dest.writeByte((byte) (isMaxSelectEnabledMask ? 1 : 0));
         dest.writeByte((byte) (isGalleryEnabledMask ? 1 : 0));
         dest.writeByte((byte) (isEditorImage ? 1 : 0));
+        dest.writeParcelable(mediaStatus, flags);
     }
 
     @Override
@@ -759,5 +764,14 @@ public class LocalMedia implements Parcelable {
             sPool.destroy();
             sPool = null;
         }
+    }
+
+
+    public LocalMediaStatus getMediaStatus() {
+        return mediaStatus;
+    }
+
+    public void setMediaStatus(LocalMediaStatus mediaStatus) {
+        this.mediaStatus = mediaStatus;
     }
 }

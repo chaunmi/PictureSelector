@@ -272,7 +272,14 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
             initComplete();
         }
         iniMagicalView();
+    //    hideEditorAndSelect();
     }
+
+   private void hideEditorAndSelect() {
+        bottomNarBar.setVisibility(View.GONE);
+        completeSelectView.setVisibility(View.GONE);
+        tvSelected.setVisibility(View.GONE);
+   }
 
     /**
      * addAminViews
@@ -789,7 +796,6 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
                 mGalleryRecycle.setBackgroundResource(R.drawable.ps_preview_gallery_bg);
             }
             group.addView(mGalleryRecycle);
-
             ViewGroup.LayoutParams layoutParams = mGalleryRecycle.getLayoutParams();
             if (layoutParams instanceof ConstraintLayout.LayoutParams) {
                 ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) layoutParams;

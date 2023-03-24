@@ -16,6 +16,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -91,6 +93,7 @@ import com.luck.picture.lib.engine.UriToFileTransformEngine;
 import com.luck.picture.lib.engine.VideoPlayerEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
+import com.luck.picture.lib.entity.LocalMediaStatus;
 import com.luck.picture.lib.entity.MediaExtraInfo;
 import com.luck.picture.lib.interfaces.OnBitmapWatermarkEventListener;
 import com.luck.picture.lib.interfaces.OnCallbackListener;
@@ -204,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
     private int resultMode = LAUNCHER_RESULT;
     private ImageEngine imageEngine;
     private VideoPlayerEngine videoPlayerEngine;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -2339,6 +2343,10 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
             Log.i(TAG, "文件大小: " + PictureFileUtils.formatAccurateUnitFileSize(media.getSize()));
             Log.i(TAG, "文件时长: " + media.getDuration());
         }
+
+    //    result.get(0).setStatus(LocalMediaStatus.generateUploadingStatus());
+    //    result.get(1).setStatus(LocalMediaStatus.generateFailedStatus());
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -2351,6 +2359,25 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
                 mAdapter.notifyItemRangeInserted(0, result.size());
             }
         });
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.getData().get(0).setMediaStatus(LocalMediaStatus.generateUploadingStatus());
+                mAdapter.getData().get(1).setMediaStatus(LocalMediaStatus.generateFailedStatus());
+                mAdapter.notifyDataSetChanged();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.getData().get(0).setMediaStatus(LocalMediaStatus.create());
+                        mAdapter.getData().get(1).setMediaStatus(LocalMediaStatus.create());
+                        mAdapter.notifyItemRangeChanged(0, 2);
+                    }
+                }, 5000);
+            }
+        }, 5000);
+
+
     }
 
 

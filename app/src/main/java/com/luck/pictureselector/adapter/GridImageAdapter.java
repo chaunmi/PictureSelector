@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,9 +16,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.entity.LocalMediaStatus;
 import com.luck.picture.lib.utils.DateUtils;
 import com.luck.pictureselector.R;
 import com.luck.pictureselector.listener.OnItemLongClickListener;
+import com.luck.pictureselector.view.LoadingImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,12 +83,18 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.View
         ImageView mImg;
         ImageView mIvDel;
         TextView tvDuration;
+        LoadingImageView statusImageView;
+        TextView tvStatusDesc;
+        LinearLayoutCompat statusContainer;
 
         public ViewHolder(View view) {
             super(view);
             mImg = view.findViewById(R.id.fiv);
             mIvDel = view.findViewById(R.id.iv_del);
             tvDuration = view.findViewById(R.id.tv_duration);
+            statusContainer = view.findViewById(R.id.status_container);
+            statusImageView = view.findViewById(R.id.iv_status);
+            tvStatusDesc = view.findViewById(R.id.tv_status_desc);
         }
     }
 
@@ -176,6 +185,24 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.View
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(viewHolder.mImg);
             }
+
+            if(media.getMediaStatus() != null && media.getMediaStatus().getStatus() != LocalMediaStatus.MediaStatus.NONE) {
+                LocalMediaStatus.MediaStatus status = media.getMediaStatus().getStatus();
+
+                if(status == LocalMediaStatus.MediaStatus.UPLOADING) {
+                    viewHolder.statusImageView.setImageResource(R.drawable.loading_circle);
+                    viewHolder.statusImageView.startAnimation();
+                    viewHolder.mIvDel.setVisibility(View.GONE);
+                }else if(status == LocalMediaStatus.MediaStatus.FAILED) {
+                    viewHolder.statusImageView.setImageResource(R.drawable.error);
+                }
+                viewHolder.tvStatusDesc.setText(media.getMediaStatus().getStatusDesc());
+                viewHolder.statusContainer.setVisibility(View.VISIBLE);
+            }else {
+                viewHolder.statusContainer.setVisibility(View.GONE);
+            }
+
+
             //itemView 的点击事件
             if (mItemClickListener != null) {
                 viewHolder.itemView.setOnClickListener(v -> {
