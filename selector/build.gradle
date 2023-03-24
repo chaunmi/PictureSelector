@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 30
@@ -42,4 +43,7 @@ dependencies {
     implementation "androidx.exifinterface:exifinterface:${cfgs.exifinterface_version}"
     implementation "androidx.viewpager2:viewpager2:${cfgs.viewpage2}"
     implementation "androidx.constraintlayout:constraintlayout:${cfgs.constraintlayout}"
+    implementation "androidx.core:core-ktx:${cfgs.kotlin_core_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+

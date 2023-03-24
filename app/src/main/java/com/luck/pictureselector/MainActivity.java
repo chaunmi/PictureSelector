@@ -1645,7 +1645,7 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
      */
     private UCrop.Options buildOptions() {
         UCrop.Options options = new UCrop.Options();
-        options.setHideBottomControls(!cb_hide.isChecked());
+        options.setHideBottomControls(cb_hide.isChecked());
         options.setFreeStyleCropEnabled(cb_styleCrop.isChecked());
         options.setShowCropFrame(cb_showCropFrame.isChecked());
         options.setShowCropGrid(cb_showCropGrid.isChecked());

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 buildscript {
     repositories {
@@ -33,4 +34,7 @@ ext {
 
 apply from: '../publish.gradle'
 
-dependencies {}
+dependencies {
+    implementation "androidx.core:core-ktx:${cfgs.kotlin_core_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

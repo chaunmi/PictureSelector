@@ -29,7 +29,9 @@ ext {
             picasso_version               : "2.71828",
 
             // coil
-            coil_version                  : "2.1.0"
+            coil_version                  : "2.1.0",
+            //kotlin
+            kotlin_core_version           : "1.7.0"
 
     ]
 }

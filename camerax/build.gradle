@@ -31,6 +31,7 @@ ext {
 }
 
 apply from: '../publish.gradle'
+apply plugin: 'kotlin-android'
 
 dependencies {
     api "androidx.camera:camera-core:1.2.0-alpha01"
@@ -40,4 +41,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
     implementation "androidx.transition:transition:${cfgs.transition}"
     implementation "androidx.concurrent:concurrent-futures:${cfgs.futures}"
+    implementation "androidx.core:core-ktx:${cfgs.kotlin_core_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
