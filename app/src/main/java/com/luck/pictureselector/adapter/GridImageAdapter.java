@@ -137,8 +137,8 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.View
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         //少于MaxSize张，显示继续添加的图标
         if (getItemViewType(position) == TYPE_CAMERA) {
-        //    viewHolder.mImg.setImageResource(R.drawable.ic_add_image);
-            viewHolder.mImg.setImageResource(R.drawable.bg_uploader_add);
+    //        viewHolder.mImg.setImageResource(R.drawable.ic_add_image);
+            viewHolder.mImg.setImageResource(R.drawable.bg_add_selector);
             viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

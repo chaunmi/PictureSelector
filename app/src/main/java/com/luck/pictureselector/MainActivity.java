@@ -2371,7 +2371,7 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
             }
         });
 
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 mAdapter.getData().get(0).setMediaStatus(LocalMediaStatus.generateUploadingStatus());
@@ -2386,9 +2386,8 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
                     }
                 }, 5000);
             }
-        }, 5000);
-
-
+        });
+        
     }
 
 
