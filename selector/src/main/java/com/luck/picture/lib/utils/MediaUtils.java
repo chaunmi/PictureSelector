@@ -190,7 +190,7 @@ public class MediaUtils {
      */
     public static MediaExtraInfo getImageSize(Context context, String url) {
         MediaExtraInfo mediaExtraInfo = new MediaExtraInfo();
-        if (PictureMimeType.isHasHttp(url)) {
+        if (PictureMimeType.isHasHttp(url) || TextUtils.isEmpty(url)) {
             return mediaExtraInfo;
         }
         InputStream inputStream = null;

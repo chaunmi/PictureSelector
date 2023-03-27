@@ -377,6 +377,16 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
         mAdapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                ArrayList<LocalMedia> list = new ArrayList<>();
+                LocalMedia localMedia1 = new LocalMedia();
+                localMedia1.setPath("https://5b0988e595225.cdn.sohucs.com/images/20180616/07eeb69c139446219bd7130b774a5957.jpeg");
+                list.add(localMedia1);
+                LocalMedia localMedia2 = new LocalMedia();
+                localMedia2.setPath("https://img1.baidu.com/it/u=431237055,3038203750&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=753");
+                list.add(localMedia2);
+                LocalMedia localMedia3 = new LocalMedia();
+                localMedia3.setPath("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202003%2F30%2F20200330031611_CNm2c.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682488647&t=354dbd2a632501229d5ead9558e28eda");
+                list.add(localMedia3);
                 // 预览图片、视频、音频
                 PictureSelector.create(MainActivity.this)
                         .openPreview()
@@ -440,7 +450,8 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
                                 return cb_custom_preview.isChecked() ? CustomPreviewFragment.newInstance() : null;
                             }
                         })
-                        .startActivityPreview(position, true, mAdapter.getData());
+                     //   .startFragmentPreview(position, false, list);
+                        .startActivityPreview(position, false, mAdapter.getData());
             }
 
             @Override

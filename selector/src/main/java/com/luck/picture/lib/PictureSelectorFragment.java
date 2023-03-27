@@ -998,9 +998,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
                 currentBucketId = currentLocalMediaFolder != null ? currentLocalMediaFolder.getBucketId()
                         : data.size() > 0 ? data.get(0).getBucketId() : PictureConfig.ALL;
             }
-            data.get(0).setPath("https://5b0988e595225.cdn.sohucs.com/images/20180616/07eeb69c139446219bd7130b774a5957.jpeg");
-            data.get(1).setPath("https://img1.baidu.com/it/u=431237055,3038203750&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=753");
-
             if (!isBottomPreview && config.isPreviewZoomEffect) {
                 BuildRecycleItemViewParams.generateViewParams(mRecycler,
                         config.isPreviewFullScreenMode ? 0 : DensityUtil.getStatusBarHeight(getContext()));

@@ -112,6 +112,7 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
 
     protected int curPosition;
 
+    //从底部点击的预览，动画效果不同
     protected boolean isInternalBottomPreview;
 
     protected boolean isSaveInstanceState;
@@ -122,7 +123,7 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
     protected String currentAlbum;
 
     /**
-     * 是否显示了拍照入口
+     * 是否显示了拍照入口，用于动画位置
      */
     protected boolean isShowCamera;
 
@@ -180,11 +181,11 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
      * 内部预览
      *
      * @param isBottomPreview 是否顶部预览进来的
-     * @param currentAlbum    当前预览的目录
+     * @param currentAlbumName    当前预览的目录
      * @param isShowCamera    是否有显示拍照图标
-     * @param position        预览下标
+     * @param position        预览下标  从0开始计数
      * @param totalNum        当前预览总数
-     * @param page            当前页码
+     * @param page            当前页码  从1开始计数
      * @param currentBucketId 当前相册目录id
      * @param data            预览数据源
      */
@@ -272,15 +273,7 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
             initComplete();
         }
         iniMagicalView();
-    //    hideEditorAndSelect();
     }
-
-   private void hideEditorAndSelect() {
-        bottomNarBar.setVisibility(View.GONE);
-        completeSelectView.setVisibility(View.GONE);
-        tvSelected.setVisibility(View.GONE);
-   }
-
     /**
      * addAminViews
      *
@@ -786,6 +779,10 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
         });
     }
 
+    /**
+     * 仿微信选图，底部有整个相册的小图预览
+     * @param group
+     */
     protected void initPreviewSelectGallery(ViewGroup group) {
         SelectMainStyle selectMainStyle = PictureSelectionConfig.selectorStyle.getSelectMainStyle();
         if (selectMainStyle.isPreviewDisplaySelectGallery()) {
