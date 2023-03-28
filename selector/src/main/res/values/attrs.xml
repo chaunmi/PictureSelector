@@ -32,6 +32,7 @@ limitations under the License.
         <attr name="psCorners" format="dimension" />
         <attr name="psTopNormal" format="boolean" />
         <attr name="psBottomNormal" format="boolean" />
+        <attr name="psIsSquare" format="boolean" />
     </declare-styleable>
 
 </resources>

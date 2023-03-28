@@ -21,6 +21,7 @@ public class RoundCornerRelativeLayout extends RelativeLayout {
     private final boolean isTopNormal;
     private final boolean isBottomNormal;
     private final RectF mRect = new RectF();
+    private final boolean isSquare;
 
     public RoundCornerRelativeLayout(Context context) {
         this(context, null);
@@ -36,6 +37,7 @@ public class RoundCornerRelativeLayout extends RelativeLayout {
         cornerSize = a.getDimension(R.styleable.PictureRoundCornerRelativeLayout_psCorners, 0);
         isTopNormal = a.getBoolean(R.styleable.PictureRoundCornerRelativeLayout_psTopNormal, false);
         isBottomNormal = a.getBoolean(R.styleable.PictureRoundCornerRelativeLayout_psBottomNormal, false);
+        isSquare = a.getBoolean(R.styleable.PictureRoundCornerRelativeLayout_psIsSquare, false);
         a.recycle();
         path = new Path();
     }
@@ -67,5 +69,15 @@ public class RoundCornerRelativeLayout extends RelativeLayout {
         canvas.clipPath(path);
         super.dispatchDraw(canvas);
         canvas.restore();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // Set a square layout.
+        if(isSquare) {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        }else {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
     }
 }
