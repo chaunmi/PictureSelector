@@ -6,7 +6,6 @@ import android.content.Intent;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -168,6 +167,22 @@ public final class PictureSelectionCameraModel {
         }
         return this;
     }
+
+    /**
+     * Change the desired orientation of this activity.  If the activity
+     * is currently in the foreground or otherwise impacting the screen
+     * orientation, the screen will immediately be changed (possibly causing
+     * the activity to be restarted). Otherwise, this will be used the next
+     * time the activity is visible.
+     *
+     * @param requestedOrientation An orientation constant as used in
+     *                             {@link android.content.pm.ActivityInfo.screenOrientation ActivityInfo.screenOrientation}.
+     */
+    public PictureSelectionCameraModel setRequestedOrientation(int requestedOrientation) {
+        selectionConfig.requestedOrientation = requestedOrientation;
+        return this;
+    }
+
 
     /**
      * Intercept camera click events, and users can implement their own camera framework
@@ -338,6 +353,25 @@ public final class PictureSelectionCameraModel {
         return this;
     }
 
+    /**
+     * Select the maximum number of files
+     *
+     * @param maxSelectNum PictureSelector max selection
+     */
+    private PictureSelectionCameraModel setMaxSelectNum(int maxSelectNum) {
+        selectionConfig.maxSelectNum = selectionConfig.selectionMode == SelectModeConfig.SINGLE ? 1 : maxSelectNum;
+        return this;
+    }
+
+    /**
+     * Select the maximum video number of files
+     *
+     * @param maxVideoSelectNum PictureSelector video max selection
+     */
+    public PictureSelectionCameraModel setMaxVideoSelectNum(int maxVideoSelectNum) {
+        selectionConfig.maxVideoSelectNum = selectionConfig.chooseMode == SelectMimeType.ofVideo() ? 0 : maxVideoSelectNum;
+        return this;
+    }
 
     /**
      * # file size The unit is KB
@@ -522,6 +556,8 @@ public final class PictureSelectionCameraModel {
         if (selectedList == null) {
             return this;
         }
+        setMaxSelectNum(selectedList.size() + 1);
+        setMaxVideoSelectNum(selectedList.size() + 1);
         if (selectionConfig.selectionMode == SelectModeConfig.SINGLE && selectionConfig.isDirectReturnSingle) {
             SelectedManager.clearSelectResult();
         } else {
