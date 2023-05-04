@@ -71,6 +71,8 @@ import com.luck.picture.lib.widget.RecyclerPreloadView;
 import com.luck.picture.lib.widget.SlideSelectTouchListener;
 import com.luck.picture.lib.widget.SlideSelectionHandler;
 import com.luck.picture.lib.widget.TitleBar;
+import com.permissionx.guolindev.Permission;
+import com.permissionx.guolindev.PermissionX;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -443,17 +445,27 @@ public class PictureSelectorFragment extends PictureCommonFragment
             if (PictureSelectionConfig.onPermissionsEventListener != null) {
                 onApplyPermissionsEvent(PermissionEvent.EVENT_SOURCE_DATA, readPermissionArray);
             } else {
-                PermissionChecker.getInstance().requestPermissions(this, readPermissionArray, new PermissionResultCallback() {
-                    @Override
-                    public void onGranted() {
-                        beginLoadData();
-                    }
+//                PermissionChecker.getInstance().requestPermissions(this, readPermissionArray, new PermissionResultCallback() {
+//                    @Override
+//                    public void onGranted() {
+//                        beginLoadData();
+//                    }
+//
+//                    @Override
+//                    public void onDenied() {
+//                        handlePermissionDenied(readPermissionArray);
+//                    }
+//                });
+                PermissionX.init(this)
+                        .permissions(readPermissionArray)
+                        .request((allGranted, grantedList, deniedList) -> {
+                            if(allGranted) {
+                                beginLoadData();
+                            }else {
+                                handlePermissionDenied(readPermissionArray);
+                            }
+                        });
 
-                    @Override
-                    public void onDenied() {
-                        handlePermissionDenied(readPermissionArray);
-                    }
-                });
             }
         }
     }

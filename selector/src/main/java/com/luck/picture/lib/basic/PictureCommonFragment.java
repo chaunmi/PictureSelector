@@ -73,6 +73,7 @@ import com.luck.picture.lib.utils.PictureFileUtils;
 import com.luck.picture.lib.utils.SdkVersionUtils;
 import com.luck.picture.lib.utils.SpUtils;
 import com.luck.picture.lib.utils.ToastUtils;
+import com.permissionx.guolindev.PermissionX;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -232,14 +233,14 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
         return context;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (mPermissionResultCallback != null) {
-            PermissionChecker.getInstance().onRequestPermissionsResult(grantResults, mPermissionResultCallback);
-            mPermissionResultCallback = null;
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (mPermissionResultCallback != null) {
+//            PermissionChecker.getInstance().onRequestPermissionsResult(grantResults, mPermissionResultCallback);
+//            mPermissionResultCallback = null;
+//        }
+//    }
 
     /**
      * Set PermissionResultCallback
@@ -887,18 +888,29 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             onApplyPermissionsEvent(PermissionEvent.EVENT_IMAGE_CAMERA, PermissionConfig.CAMERA);
         } else {
-            PermissionChecker.getInstance().requestPermissions(this, PermissionConfig.CAMERA,
-                    new PermissionResultCallback() {
-                        @Override
-                        public void onGranted() {
-                            startCameraImageCapture();
-                        }
+//            PermissionChecker.getInstance().requestPermissions(this, PermissionConfig.CAMERA,
+//                    new PermissionResultCallback() {
+//                        @Override
+//                        public void onGranted() {
+//                            startCameraImageCapture();
+//                        }
+//
+//                        @Override
+//                        public void onDenied() {
+//                            handlePermissionDenied(PermissionConfig.CAMERA);
+//                        }
+//                    });
 
-                        @Override
-                        public void onDenied() {
+            PermissionX.init(this)
+                    .permissions(PermissionConfig.CAMERA)
+                    .request((allGranted, grantedList, deniedList) -> {
+                        if(allGranted) {
+                            startCameraImageCapture();
+                        }else {
                             handlePermissionDenied(PermissionConfig.CAMERA);
                         }
                     });
+
         }
     }
 
@@ -934,18 +946,29 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             onApplyPermissionsEvent(PermissionEvent.EVENT_VIDEO_CAMERA, PermissionConfig.CAMERA);
         } else {
-            PermissionChecker.getInstance().requestPermissions(this, PermissionConfig.CAMERA,
-                    new PermissionResultCallback() {
-                        @Override
-                        public void onGranted() {
-                            startCameraVideoCapture();
-                        }
+//            PermissionChecker.getInstance().requestPermissions(this, PermissionConfig.CAMERA,
+//                    new PermissionResultCallback() {
+//                        @Override
+//                        public void onGranted() {
+//                            startCameraVideoCapture();
+//                        }
+//
+//                        @Override
+//                        public void onDenied() {
+//                            handlePermissionDenied(PermissionConfig.CAMERA);
+//                        }
+//                    });
 
-                        @Override
-                        public void onDenied() {
+            PermissionX.init(this)
+                    .permissions(PermissionConfig.CAMERA)
+                    .request((allGranted, grantedList, deniedList) -> {
+                        if(allGranted) {
+                            startCameraVideoCapture();
+                        }else {
                             handlePermissionDenied(PermissionConfig.CAMERA);
                         }
                     });
+
         }
     }
 

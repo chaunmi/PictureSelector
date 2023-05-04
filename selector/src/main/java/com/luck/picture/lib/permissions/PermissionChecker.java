@@ -15,6 +15,8 @@ import com.luck.picture.lib.basic.PictureCommonFragment;
 import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.utils.ActivityCompatHelper;
 import com.luck.picture.lib.utils.SdkVersionUtils;
+import com.permissionx.guolindev.Permission;
+import com.permissionx.guolindev.PermissionX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,8 +110,7 @@ public class PermissionChecker {
         boolean isAllGranted = true;
         if (permissions != null) {
             for (String permission : permissions) {
-                if (ContextCompat.checkSelfPermission(ctx.getApplicationContext(), permission)
-                        != PackageManager.PERMISSION_GRANTED) {
+                if (!PermissionX.isPermissionGranted(ctx, permission)) {
                     isAllGranted = false;
                     break;
                 }
@@ -144,7 +145,7 @@ public class PermissionChecker {
     @RequiresApi(api = 33)
     public static boolean isCheckReadImages(Context context) {
         return PermissionChecker.checkSelfPermission(context,
-                new String[]{PermissionConfig.READ_MEDIA_IMAGES});
+                new String[]{Permission.READ_MEDIA_IMAGES});
     }
 
     /**
@@ -153,7 +154,7 @@ public class PermissionChecker {
     @RequiresApi(api = 33)
     public static boolean isCheckReadVideo(Context context) {
         return PermissionChecker.checkSelfPermission(context,
-                new String[]{PermissionConfig.READ_MEDIA_VIDEO});
+                new String[]{Permission.READ_MEDIA_VIDEO});
     }
 
     /**
@@ -162,7 +163,7 @@ public class PermissionChecker {
     @RequiresApi(api = 33)
     public static boolean isCheckReadAudio(Context context) {
         return PermissionChecker.checkSelfPermission(context,
-                new String[]{PermissionConfig.READ_MEDIA_AUDIO});
+                new String[]{Permission.READ_MEDIA_AUDIO});
     }
 
     /**
@@ -170,7 +171,7 @@ public class PermissionChecker {
      */
     public static boolean isCheckWriteExternalStorage(Context context) {
         return PermissionChecker.checkSelfPermission(context,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                new String[]{Permission.WRITE_EXTERNAL_STORAGE});
     }
 
     /**
@@ -178,7 +179,7 @@ public class PermissionChecker {
      */
     public static boolean isCheckReadExternalStorage(Context context) {
         return PermissionChecker.checkSelfPermission(context,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+                new String[]{Permission.READ_EXTERNAL_STORAGE});
     }
 
 
@@ -186,7 +187,7 @@ public class PermissionChecker {
      * 检查相机权限是否存在
      */
     public static boolean isCheckCamera(Context context) {
-        return PermissionChecker.checkSelfPermission(context, new String[]{Manifest.permission.CAMERA});
+        return PermissionChecker.checkSelfPermission(context, new String[]{Permission.CAMERA});
     }
 
     /**

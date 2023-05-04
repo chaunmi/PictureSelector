@@ -29,6 +29,7 @@ import com.luck.picture.lib.permissions.PermissionConfig;
 import com.luck.picture.lib.permissions.PermissionResultCallback;
 import com.luck.picture.lib.utils.SdkVersionUtils;
 import com.luck.picture.lib.utils.ToastUtils;
+import com.permissionx.guolindev.PermissionX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,17 +78,28 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
             if (PictureSelectionConfig.onPermissionsEventListener != null) {
                 onApplyPermissionsEvent(PermissionEvent.EVENT_SYSTEM_SOURCE_DATA, readPermissionArray);
             } else {
-                PermissionChecker.getInstance().requestPermissions(this, readPermissionArray, new PermissionResultCallback() {
-                    @Override
-                    public void onGranted() {
-                        openSystemAlbum();
-                    }
+//                PermissionChecker.getInstance().requestPermissions(this, readPermissionArray, new PermissionResultCallback() {
+//                    @Override
+//                    public void onGranted() {
+//                        openSystemAlbum();
+//                    }
+//
+//                    @Override
+//                    public void onDenied() {
+//                        handlePermissionDenied(readPermissionArray);
+//                    }
+//                });
 
-                    @Override
-                    public void onDenied() {
-                        handlePermissionDenied(readPermissionArray);
-                    }
-                });
+                PermissionX.init(this)
+                        .permissions(readPermissionArray)
+                        .request((allGranted, grantedList, deniedList) -> {
+                            if(allGranted) {
+                                openSystemAlbum();
+                            }else {
+                                handlePermissionDenied(readPermissionArray);
+                            }
+                        });
+
             }
         }
     }

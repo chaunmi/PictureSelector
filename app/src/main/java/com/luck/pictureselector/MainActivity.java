@@ -141,6 +141,13 @@ import com.luck.picture.lib.widget.MediumBoldTextView;
 import com.luck.pictureselector.adapter.GridImageAdapter;
 import com.luck.pictureselector.listener.DragListener;
 import com.luck.pictureselector.listener.OnItemLongClickListener;
+import com.permissionx.guolindev.Permission;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.ExplainReasonCallback;
+import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
+import com.permissionx.guolindev.callback.RequestCallback;
+import com.permissionx.guolindev.request.ExplainScope;
+import com.permissionx.guolindev.request.ForwardScope;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropImageEngine;
 import com.yalantis.ucrop.model.AspectRatio;
@@ -154,6 +161,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
@@ -1467,25 +1475,53 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
 
         @Override
         public void onRecordAudio(Fragment fragment, int requestCode) {
-            String[] recordAudio = {Manifest.permission.RECORD_AUDIO};
-            if (PermissionChecker.isCheckSelfPermission(fragment.getContext(), recordAudio)) {
+            String[] recordAudio = {Permission.RECORD_AUDIO};
+//            if (PermissionChecker.isCheckSelfPermission(fragment.getContext(), recordAudio)) {
+//                startRecordSoundAction(fragment, requestCode);
+//            } else {
+//                addPermissionDescription(false, (ViewGroup) fragment.requireView(), recordAudio);
+//                PermissionChecker.getInstance().requestPermissions(fragment,
+//                        new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionResultCallback() {
+//                            @Override
+//                            public void onGranted() {
+//                                removePermissionDescription((ViewGroup) fragment.requireView());
+//                                startRecordSoundAction(fragment, requestCode);
+//                            }
+//
+//                            @Override
+//                            public void onDenied() {
+//                                removePermissionDescription((ViewGroup) fragment.requireView());
+//                            }
+//                        });
+//            }
+
+            if(PermissionChecker.isCheckSelfPermission(fragment.getContext(), recordAudio)) {
                 startRecordSoundAction(fragment, requestCode);
-            } else {
-                addPermissionDescription(false, (ViewGroup) fragment.requireView(), recordAudio);
-                PermissionChecker.getInstance().requestPermissions(fragment,
-                        new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionResultCallback() {
+            }else {
+                PermissionX.init(fragment).permissions(recordAudio).
+                        onExplainRequestReason(new ExplainReasonCallback() {
                             @Override
-                            public void onGranted() {
+                            public void onExplainReason(@NonNull ExplainScope explainScope, @NonNull List<String> deniedList) {
+                                String message = "PermissionX needs following permissions to continue";
+                                explainScope.showRequestReasonDialog(deniedList, message, "允许", "拒绝");
+                            }
+                        }).onForwardToSettings(new ForwardToSettingsCallback() {
+                            @Override
+                            public void onForwardToSettings(@NonNull ForwardScope forwardScope, @NonNull List<String> deniedList) {
+                                String message = "Please allow following permissions in settings";
+                                forwardScope.showForwardToSettingsDialog(deniedList, message, "允许", "拒绝");
+                            }
+                        }).
+                        request((allGranted, grantedList, deniedList) -> {
+                            if(allGranted) {
                                 removePermissionDescription((ViewGroup) fragment.requireView());
                                 startRecordSoundAction(fragment, requestCode);
-                            }
-
-                            @Override
-                            public void onDenied() {
+                            }else {
                                 removePermissionDescription((ViewGroup) fragment.requireView());
                             }
                         });
             }
+
         }
     }
 

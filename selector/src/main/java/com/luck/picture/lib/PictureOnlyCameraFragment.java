@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,14 @@ import com.luck.picture.lib.permissions.PermissionConfig;
 import com.luck.picture.lib.permissions.PermissionResultCallback;
 import com.luck.picture.lib.utils.SdkVersionUtils;
 import com.luck.picture.lib.utils.ToastUtils;
+import com.permissionx.guolindev.Permission;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.ExplainReasonCallback;
+import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
+import com.permissionx.guolindev.request.ExplainScope;
+import com.permissionx.guolindev.request.ForwardScope;
+
+import java.util.List;
 
 /**
  * @author：luck
@@ -50,18 +59,28 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
             if (SdkVersionUtils.isQ()) {
                 openSelectedCamera();
             } else {
-                String[] writePermissionArray = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                PermissionChecker.getInstance().requestPermissions(this, writePermissionArray, new PermissionResultCallback() {
-                    @Override
-                    public void onGranted() {
-                        openSelectedCamera();
-                    }
+                String[] writePermissionArray = new String[]{Permission.WRITE_EXTERNAL_STORAGE};
+//                PermissionChecker.getInstance().requestPermissions(this, writePermissionArray, new PermissionResultCallback() {
+//                    @Override
+//                    public void onGranted() {
+//                        openSelectedCamera();
+//                    }
+//
+//                    @Override
+//                    public void onDenied() {
+//                        handlePermissionDenied(writePermissionArray);
+//                    }
+//                });
 
-                    @Override
-                    public void onDenied() {
-                        handlePermissionDenied(writePermissionArray);
-                    }
-                });
+                PermissionX.init(this)
+                        .permissions(writePermissionArray)
+                        .request((allGranted, grantedList, deniedList) -> {
+                            if(allGranted) {
+                               openSelectedCamera();
+                            }else {
+                                handlePermissionDenied(writePermissionArray);
+                            }
+                        });
             }
         }
     }

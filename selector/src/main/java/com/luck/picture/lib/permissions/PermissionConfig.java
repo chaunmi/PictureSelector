@@ -4,6 +4,7 @@ import android.Manifest;
 
 import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.utils.SdkVersionUtils;
+import com.permissionx.guolindev.Permission;
 
 /**
  * @author：luck
@@ -24,7 +25,7 @@ public class PermissionConfig {
     /**
      * 相机权限
      */
-    public final static String[] CAMERA = new String[]{Manifest.permission.CAMERA};
+    public final static String[] CAMERA = new String[]{Permission.CAMERA};
 
     /**
      * 获取外部读取权限
@@ -32,16 +33,16 @@ public class PermissionConfig {
     public static String[] getReadPermissionArray(int chooseMode) {
         if (SdkVersionUtils.isTIRAMISU()) {
             if (chooseMode == SelectMimeType.ofImage()) {
-                return new String[]{READ_MEDIA_IMAGES};
+                return new String[]{Permission.READ_MEDIA_IMAGES};
             } else if (chooseMode == SelectMimeType.ofVideo()) {
-                return new String[]{READ_MEDIA_VIDEO};
+                return new String[]{Permission.READ_MEDIA_VIDEO};
             } else if (chooseMode == SelectMimeType.ofAudio()) {
-                return new String[]{READ_MEDIA_AUDIO};
+                return new String[]{Permission.READ_MEDIA_AUDIO};
             } else {
-                return new String[]{READ_MEDIA_IMAGES, READ_MEDIA_VIDEO};
+                return new String[]{Permission.READ_MEDIA_IMAGES, Permission.READ_MEDIA_VIDEO};
             }
         }
-        return new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+        return new String[]{Permission.READ_EXTERNAL_STORAGE};
     }
 
 }

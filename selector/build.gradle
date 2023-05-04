@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode cfgs.versionCode
         versionName cfgs.versionName
 
@@ -36,6 +36,7 @@ ext {
 apply from: '../publish.gradle'
 
 dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar','*.aar'])
     implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
     implementation "androidx.recyclerview:recyclerview:${cfgs.version_recyclerview}"
     implementation "androidx.activity:activity:${cfgs.activity_version}"
