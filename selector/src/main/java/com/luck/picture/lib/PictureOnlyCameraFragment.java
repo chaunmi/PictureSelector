@@ -74,6 +74,18 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
 
                 PermissionX.init(this)
                         .permissions(writePermissionArray)
+                        .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                            //TODO 接口获取解释文案
+                            if(!beforeRequest) {
+                                String message = "需要访外部存储权限，缺少外部存储权限可能会导致该功能无法使用";
+                                scope.showRequestReasonDialog(deniedList, message, "同意", "拒绝");
+                            }
+                        })
+                        .onForwardToSettings((scope, deniedList) -> {
+                            //TODO 接口获取跳转文案
+                            String message = "需要前往\"设置\"页中开启下列权限";
+                            scope.showForwardToSettingsDialog(deniedList, message, "同意", "拒绝");
+                        })
                         .request((allGranted, grantedList, deniedList) -> {
                             if(allGranted) {
                                openSelectedCamera();
@@ -105,7 +117,6 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
 
     @Override
     public void handlePermissionSettingResult(String[] permissions) {
-        onPermissionExplainEvent(false, null);
         boolean isHasPermissions;
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             isHasPermissions = PictureSelectionConfig.onPermissionsEventListener
@@ -113,6 +124,7 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
         } else {
             isHasPermissions = PermissionChecker.isCheckCamera(getContext());
             if (SdkVersionUtils.isQ()) {
+
             } else {
                 isHasPermissions = PermissionChecker.isCheckWriteExternalStorage(getContext());
             }
@@ -120,15 +132,20 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
         if (isHasPermissions) {
             openSelectedCamera();
         } else {
-            if (!PermissionChecker.isCheckCamera(getContext())) {
-                ToastUtils.showToast(getContext(), getString(R.string.ps_camera));
-            } else {
-                if (!PermissionChecker.isCheckWriteExternalStorage(getContext())) {
-                    ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
-                }
-            }
-            onKeyBackFragmentFinish();
+            defaultHandlePermissionDenied(permissions);
         }
         PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
+    }
+
+    @Override
+    protected void defaultHandlePermissionDenied(String[] permissionArray) {
+        if (!PermissionChecker.isCheckCamera(getContext())) {
+            ToastUtils.showToast(getContext(), getString(R.string.ps_camera));
+        } else {
+            if (!PermissionChecker.isCheckWriteExternalStorage(getContext())) {
+                ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
+            }
+        }
+        onKeyBackFragmentFinish();
     }
 }

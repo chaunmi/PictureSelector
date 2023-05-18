@@ -32,6 +32,8 @@ public class LocalMedia implements Parcelable {
      */
     private String path;
 
+
+    private String pathUri;
     /**
      * The real path，But you can't get access from AndroidQ
      */
@@ -203,6 +205,7 @@ public class LocalMedia implements Parcelable {
     protected LocalMedia(Parcel in) {
         id = in.readLong();
         path = in.readString();
+        pathUri = in.readString();
         realPath = in.readString();
         originalPath = in.readString();
         compressPath = in.readString();
@@ -242,6 +245,7 @@ public class LocalMedia implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(path);
+        dest.writeString(pathUri);
         dest.writeString(realPath);
         dest.writeString(originalPath);
         dest.writeString(compressPath);
@@ -333,6 +337,12 @@ public class LocalMedia implements Parcelable {
         LocalMedia media = LocalMedia.create();
         File cameraFile = PictureMimeType.isContent(path) ? new File(PictureFileUtils.getPath(context, Uri.parse(path))) : new File(path);
         media.setPath(path);
+        if(PictureMimeType.isContent(path)) {
+            media.pathUri = path;
+        }else {
+            Uri pathUri =  PictureFileUtils.parUri(context, cameraFile);
+            media.pathUri = pathUri.toString();
+        }
         media.setRealPath(cameraFile.getAbsolutePath());
         media.setFileName(cameraFile.getName());
         media.setParentFolderName(MediaUtils.generateCameraFolderName(cameraFile.getAbsolutePath()));

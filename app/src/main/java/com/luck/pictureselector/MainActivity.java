@@ -1502,13 +1502,13 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
                         onExplainRequestReason(new ExplainReasonCallback() {
                             @Override
                             public void onExplainReason(@NonNull ExplainScope explainScope, @NonNull List<String> deniedList) {
-                                String message = "PermissionX needs following permissions to continue";
+                                String message = "需要访问录音权限，缺少外部存储权限可能会导致该功能无法使用";
                                 explainScope.showRequestReasonDialog(deniedList, message, "允许", "拒绝");
                             }
                         }).onForwardToSettings(new ForwardToSettingsCallback() {
                             @Override
                             public void onForwardToSettings(@NonNull ForwardScope forwardScope, @NonNull List<String> deniedList) {
-                                String message = "Please allow following permissions in settings";
+                                String message = "需要前往\"设置\"页中开启下列权限";
                                 forwardScope.showForwardToSettingsDialog(deniedList, message, "允许", "拒绝");
                             }
                         }).

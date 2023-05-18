@@ -74,7 +74,6 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
             openSystemAlbum();
         } else {
             String[] readPermissionArray = PermissionConfig.getReadPermissionArray(config.chooseMode);
-            onPermissionExplainEvent(true, readPermissionArray);
             if (PictureSelectionConfig.onPermissionsEventListener != null) {
                 onApplyPermissionsEvent(PermissionEvent.EVENT_SYSTEM_SOURCE_DATA, readPermissionArray);
             } else {
@@ -92,6 +91,18 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
 
                 PermissionX.init(this)
                         .permissions(readPermissionArray)
+                        .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                            //TODO 接口获取解释文案
+                            if(!beforeRequest) {
+                                String message = "需要访外部存储权限，缺少外部存储权限可能会导致该功能无法使用";
+                                scope.showRequestReasonDialog(deniedList, message, "同意", "拒绝");
+                            }
+                        })
+                        .onForwardToSettings((scope, deniedList) -> {
+                            //TODO 接口获取跳转文案
+                            String message = "需要前往\"设置\"页中开启下列权限";
+                            scope.showForwardToSettingsDialog(deniedList, message, "同意", "拒绝");
+                        })
                         .request((allGranted, grantedList, deniedList) -> {
                             if(allGranted) {
                                 openSystemAlbum();
@@ -125,7 +136,6 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
      * 打开系统相册
      */
     private void openSystemAlbum() {
-        onPermissionExplainEvent(false, null);
         if (config.selectionMode == SelectModeConfig.SINGLE) {
             if (config.chooseMode == SelectMimeType.ofAll()) {
                 mDocSingleLauncher.launch(SelectMimeType.SYSTEM_ALL);
@@ -375,7 +385,6 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
 
     @Override
     public void handlePermissionSettingResult(String[] permissions) {
-        onPermissionExplainEvent(false, null);
         boolean isCheckReadStorage;
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             isCheckReadStorage = PictureSelectionConfig.onPermissionsEventListener
@@ -386,10 +395,15 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
         if (isCheckReadStorage) {
             openSystemAlbum();
         } else {
-            ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
-            onKeyBackFragmentFinish();
+           defaultHandlePermissionDenied(permissions);
         }
         PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
+    }
+
+    @Override
+    protected void defaultHandlePermissionDenied(String[] permissions) {
+        ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
+        onKeyBackFragmentFinish();
     }
 
     @Override

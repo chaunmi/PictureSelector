@@ -441,7 +441,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
             beginLoadData();
         } else {
             String[] readPermissionArray = PermissionConfig.getReadPermissionArray(config.chooseMode);
-            onPermissionExplainEvent(true, readPermissionArray);
             if (PictureSelectionConfig.onPermissionsEventListener != null) {
                 onApplyPermissionsEvent(PermissionEvent.EVENT_SOURCE_DATA, readPermissionArray);
             } else {
@@ -458,6 +457,18 @@ public class PictureSelectorFragment extends PictureCommonFragment
 //                });
                 PermissionX.init(this)
                         .permissions(readPermissionArray)
+                        .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                            //TODO 接口获取解释文案
+                            if(!beforeRequest) {
+                                String message = "需要访外部存储权限，缺少外部存储权限可能会导致该功能无法使用";
+                                scope.showRequestReasonDialog(deniedList, message, "同意", "拒绝");
+                            }
+                        })
+                        .onForwardToSettings((scope, deniedList) -> {
+                            //TODO 接口获取跳转文案
+                            String message = "需要前往\"设置\"页中开启下列权限";
+                            scope.showForwardToSettingsDialog(deniedList, message, "同意", "拒绝");
+                        })
                         .request((allGranted, grantedList, deniedList) -> {
                             if(allGranted) {
                                 beginLoadData();
@@ -492,7 +503,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
      * 开始获取数据
      */
     private void beginLoadData() {
-        onPermissionExplainEvent(false, null);
         if (config.isOnlySandboxDir) {
             loadOnlyInAppDirectoryAllMediaData();
         } else {
@@ -505,7 +515,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
         if (permissions == null){
             return;
         }
-        onPermissionExplainEvent(false, null);
         boolean isHasCamera = permissions.length > 0 && TextUtils.equals(permissions[0], PermissionConfig.CAMERA[0]);
         boolean isHasPermissions;
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
@@ -520,14 +529,20 @@ public class PictureSelectorFragment extends PictureCommonFragment
                 beginLoadData();
             }
         } else {
-            if (isHasCamera) {
-                ToastUtils.showToast(getContext(), getString(R.string.ps_camera));
-            } else {
-                ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
-                onKeyBackFragmentFinish();
-            }
+            defaultHandlePermissionDenied(permissions);
         }
         PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
+    }
+
+    @Override
+    protected void defaultHandlePermissionDenied(String[] permissions) {
+        boolean isHasCamera = permissions.length > 0 && TextUtils.equals(permissions[0], PermissionConfig.CAMERA[0]);
+        if (isHasCamera) {
+            ToastUtils.showToast(getContext(), getString(R.string.ps_camera));
+        } else {
+            ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
+            onKeyBackFragmentFinish();
+        }
     }
 
     /**

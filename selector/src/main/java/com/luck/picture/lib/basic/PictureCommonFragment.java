@@ -258,7 +258,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
             SpUtils.putBoolean(getAppContext(), permissionArray[0], true);
         }
         if (PictureSelectionConfig.onPermissionDeniedListener != null) {
-            onPermissionExplainEvent(false, null);
             PictureSelectionConfig.onPermissionDeniedListener
                     .onDenied(this, permissionArray, PictureConfig.REQUEST_GO_SETTING,
                             new OnCallbackListener<Boolean>() {
@@ -270,10 +269,11 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
                                 }
                             });
         } else {
-            PermissionUtil.goIntentSetting(this, PictureConfig.REQUEST_GO_SETTING);
+            defaultHandlePermissionDenied(permissionArray);
         }
     }
 
+    protected void defaultHandlePermissionDenied(String[] permissionArray) {}
     /**
      * 使用PictureSelector 默认方式进入
      *
@@ -884,7 +884,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
 
     @Override
     public void openImageCamera() {
-        onPermissionExplainEvent(true, PermissionConfig.CAMERA);
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             onApplyPermissionsEvent(PermissionEvent.EVENT_IMAGE_CAMERA, PermissionConfig.CAMERA);
         } else {
@@ -903,6 +902,18 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
 
             PermissionX.init(this)
                     .permissions(PermissionConfig.CAMERA)
+                    .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                        //TODO 接口获取解释文案
+                        if(!beforeRequest) {
+                            String message = "需要访问相机权限，缺少相机权限可能会导致该功能无法使用";
+                            scope.showRequestReasonDialog(deniedList, message, "同意", "拒绝");
+                        }
+                    })
+                    .onForwardToSettings((scope, deniedList) -> {
+                        //TODO 接口获取跳转文案
+                        String message = "需要前往\"设置\"页中开启下列权限";
+                        scope.showForwardToSettingsDialog(deniedList, message, "同意", "拒绝");
+                    })
                     .request((allGranted, grantedList, deniedList) -> {
                         if(allGranted) {
                             startCameraImageCapture();
@@ -919,7 +930,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
      */
     protected void startCameraImageCapture() {
         if (!ActivityCompatHelper.isDestroy(getActivity())) {
-            onPermissionExplainEvent(false, null);
             if (PictureSelectionConfig.onCameraInterceptListener != null) {
                 onInterceptCameraEvent(SelectMimeType.TYPE_IMAGE);
             } else {
@@ -942,7 +952,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
 
     @Override
     public void openVideoCamera() {
-        onPermissionExplainEvent(true, PermissionConfig.CAMERA);
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             onApplyPermissionsEvent(PermissionEvent.EVENT_VIDEO_CAMERA, PermissionConfig.CAMERA);
         } else {
@@ -961,6 +970,18 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
 
             PermissionX.init(this)
                     .permissions(PermissionConfig.CAMERA)
+                    .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                        //TODO 接口获取解释文案
+                        if(!beforeRequest) {
+                            String message = "需要访问相机权限，缺少相机权限可能会导致该功能无法使用";
+                            scope.showRequestReasonDialog(deniedList, message, "同意", "拒绝");
+                        }
+                    })
+                    .onForwardToSettings((scope, deniedList) -> {
+                        //TODO 接口获取跳转文案
+                        String message = "需要前往\"设置\"页中开启下列权限";
+                        scope.showForwardToSettingsDialog(deniedList, message, "同意", "拒绝");
+                    })
                     .request((allGranted, grantedList, deniedList) -> {
                         if(allGranted) {
                             startCameraVideoCapture();
@@ -977,7 +998,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
      */
     protected void startCameraVideoCapture() {
         if (!ActivityCompatHelper.isDestroy(getActivity())) {
-            onPermissionExplainEvent(false, null);
             if (PictureSelectionConfig.onCameraInterceptListener != null) {
                 onInterceptCameraEvent(SelectMimeType.TYPE_VIDEO);
             } else {
@@ -1043,28 +1063,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
                         }
                     }
                 });
-    }
-
-    /**
-     * 权限说明
-     *
-     * @param permissionArray
-     */
-    @Override
-    public void onPermissionExplainEvent(boolean isDisplayExplain, String[] permissionArray) {
-        if (PictureSelectionConfig.onPermissionDescriptionListener != null) {
-            if (isDisplayExplain) {
-                if (PermissionChecker.isCheckSelfPermission(getAppContext(), permissionArray)) {
-                    SpUtils.putBoolean(getAppContext(), permissionArray[0], false);
-                } else {
-                    if (!SpUtils.getBoolean(getAppContext(), permissionArray[0], false)) {
-                        PictureSelectionConfig.onPermissionDescriptionListener.onPermissionDescription(this, permissionArray);
-                    }
-                }
-            } else {
-                PictureSelectionConfig.onPermissionDescriptionListener.onDismiss(this);
-            }
-        }
     }
 
     /**

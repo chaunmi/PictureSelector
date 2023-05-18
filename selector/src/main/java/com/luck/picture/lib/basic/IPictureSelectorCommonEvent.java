@@ -282,14 +282,6 @@ public interface IPictureSelectorCommonEvent {
     void onApplyPermissionsEvent(int event, String[] permissionArray);
 
     /**
-     * 权限说明
-     *
-     * @param isDisplayExplain  是否显示权限说明
-     * @param permissionArray   权限组
-     */
-    void onPermissionExplainEvent(boolean isDisplayExplain, String[] permissionArray);
-
-    /**
      * 拦截相机事件
      *
      * @param cameraMode {@link SelectMimeType}
