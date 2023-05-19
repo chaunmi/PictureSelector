@@ -254,9 +254,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
     @Override
     public void handlePermissionDenied(String[] permissionArray) {
         PermissionConfig.CURRENT_REQUEST_PERMISSION = permissionArray;
-        if (permissionArray != null && permissionArray.length > 0) {
-            SpUtils.putBoolean(getAppContext(), permissionArray[0], true);
-        }
         if (PictureSelectionConfig.onPermissionDeniedListener != null) {
             PictureSelectionConfig.onPermissionDeniedListener
                     .onDenied(this, permissionArray, PictureConfig.REQUEST_GO_SETTING,

@@ -117,6 +117,9 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
 
     @Override
     public void handlePermissionSettingResult(String[] permissions) {
+        if(permissions == null || permissions.length == 0) {
+            return;
+        }
         boolean isHasPermissions;
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             isHasPermissions = PictureSelectionConfig.onPermissionsEventListener
@@ -139,6 +142,9 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
 
     @Override
     protected void defaultHandlePermissionDenied(String[] permissionArray) {
+        if(permissionArray == null || permissionArray.length == 0) {
+            return;
+        }
         if (!PermissionChecker.isCheckCamera(getContext())) {
             ToastUtils.showToast(getContext(), getString(R.string.ps_camera));
         } else {

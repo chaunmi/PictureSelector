@@ -385,6 +385,9 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
 
     @Override
     public void handlePermissionSettingResult(String[] permissions) {
+        if(permissions == null || permissions.length == 0) {
+            return;
+        }
         boolean isCheckReadStorage;
         if (PictureSelectionConfig.onPermissionsEventListener != null) {
             isCheckReadStorage = PictureSelectionConfig.onPermissionsEventListener
@@ -402,6 +405,9 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
 
     @Override
     protected void defaultHandlePermissionDenied(String[] permissions) {
+        if(permissions == null || permissions.length == 0) {
+            return;
+        }
         ToastUtils.showToast(getContext(), getString(R.string.ps_jurisdiction));
         onKeyBackFragmentFinish();
     }
