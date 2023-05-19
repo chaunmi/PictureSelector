@@ -163,7 +163,6 @@ public final class PictureSelectionConfig implements Parcelable {
     public static OnPreviewInterceptListener onPreviewInterceptListener;
     public static OnSelectFilterListener onSelectFilterListener;
     public static OnPermissionDescriptionListener onPermissionDescriptionListener;
-    public static OnPermissionDeniedListener onPermissionDeniedListener;
     public static OnRecordAudioInterceptListener onRecordAudioListener;
     public static OnQueryFilterListener onQueryFilterListener;
     public static OnBitmapWatermarkEventListener onBitmapWatermarkListener;
@@ -512,7 +511,6 @@ public final class PictureSelectionConfig implements Parcelable {
         PictureSelectionConfig.onSelectLimitTipsListener = null;
         PictureSelectionConfig.onSelectFilterListener = null;
         PictureSelectionConfig.onPermissionDescriptionListener = null;
-        PictureSelectionConfig.onPermissionDeniedListener = null;
         PictureSelectionConfig.onRecordAudioListener = null;
         PictureSelectionConfig.onQueryFilterListener = null;
         PictureSelectionConfig.onBitmapWatermarkListener = null;

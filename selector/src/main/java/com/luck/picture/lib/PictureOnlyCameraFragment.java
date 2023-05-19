@@ -115,34 +115,10 @@ public class PictureOnlyCameraFragment extends PictureCommonFragment {
         }
     }
 
+
     @Override
-    public void handlePermissionSettingResult(String[] permissions) {
+    public void handlePermissionDenied(String[] permissions) {
         if(permissions == null || permissions.length == 0) {
-            return;
-        }
-        boolean isHasPermissions;
-        if (PictureSelectionConfig.onPermissionsEventListener != null) {
-            isHasPermissions = PictureSelectionConfig.onPermissionsEventListener
-                    .hasPermissions(this, permissions);
-        } else {
-            isHasPermissions = PermissionChecker.isCheckCamera(getContext());
-            if (SdkVersionUtils.isQ()) {
-
-            } else {
-                isHasPermissions = PermissionChecker.isCheckWriteExternalStorage(getContext());
-            }
-        }
-        if (isHasPermissions) {
-            openSelectedCamera();
-        } else {
-            defaultHandlePermissionDenied(permissions);
-        }
-        PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
-    }
-
-    @Override
-    protected void defaultHandlePermissionDenied(String[] permissionArray) {
-        if(permissionArray == null || permissionArray.length == 0) {
             return;
         }
         if (!PermissionChecker.isCheckCamera(getContext())) {

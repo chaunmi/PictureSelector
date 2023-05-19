@@ -498,7 +498,6 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
                                 .setEditMediaInterceptListener(getCustomEditMediaEvent())
                                 .setPermissionDescriptionListener(getPermissionDescriptionListener())
                                 .setPreviewInterceptListener(getPreviewInterceptListener())
-                                .setPermissionDeniedListener(getPermissionDeniedListener())
                                 .setAddBitmapWatermarkListener(getAddBitmapWatermarkListener())
                                 .setVideoThumbnailListener(getVideoThumbnailEventListener())
                                 .isAutoVideoPlay(cb_auto_video.isChecked())

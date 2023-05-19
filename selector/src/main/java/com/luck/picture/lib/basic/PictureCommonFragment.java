@@ -201,11 +201,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
     }
 
     @Override
-    public void handlePermissionSettingResult(String[] permissions) {
-
-    }
-
-    @Override
     public void onEditMedia(Intent intent) {
 
     }
@@ -253,24 +248,9 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
 
     @Override
     public void handlePermissionDenied(String[] permissionArray) {
-        PermissionConfig.CURRENT_REQUEST_PERMISSION = permissionArray;
-        if (PictureSelectionConfig.onPermissionDeniedListener != null) {
-            PictureSelectionConfig.onPermissionDeniedListener
-                    .onDenied(this, permissionArray, PictureConfig.REQUEST_GO_SETTING,
-                            new OnCallbackListener<Boolean>() {
-                                @Override
-                                public void onCall(Boolean isResult) {
-                                    if (isResult) {
-                                        handlePermissionSettingResult(PermissionConfig.CURRENT_REQUEST_PERMISSION);
-                                    }
-                                }
-                            });
-        } else {
-            defaultHandlePermissionDenied(permissionArray);
-        }
+
     }
 
-    protected void defaultHandlePermissionDenied(String[] permissionArray) {}
     /**
      * 使用PictureSelector 默认方式进入
      *
@@ -1157,8 +1137,6 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
                     MediaUtils.deleteUri(getAppContext(), config.cameraPath);
                     config.cameraPath = "";
                 }
-            } else if (requestCode == PictureConfig.REQUEST_GO_SETTING) {
-                handlePermissionSettingResult(PermissionConfig.CURRENT_REQUEST_PERMISSION);
             }
         }
     }

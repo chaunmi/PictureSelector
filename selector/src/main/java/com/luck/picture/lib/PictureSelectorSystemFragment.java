@@ -384,27 +384,7 @@ public class PictureSelectorSystemFragment extends PictureCommonFragment {
     }
 
     @Override
-    public void handlePermissionSettingResult(String[] permissions) {
-        if(permissions == null || permissions.length == 0) {
-            return;
-        }
-        boolean isCheckReadStorage;
-        if (PictureSelectionConfig.onPermissionsEventListener != null) {
-            isCheckReadStorage = PictureSelectionConfig.onPermissionsEventListener
-                    .hasPermissions(this, permissions);
-        } else {
-            isCheckReadStorage = PermissionChecker.isCheckReadStorage(config.chooseMode, getContext());
-        }
-        if (isCheckReadStorage) {
-            openSystemAlbum();
-        } else {
-           defaultHandlePermissionDenied(permissions);
-        }
-        PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
-    }
-
-    @Override
-    protected void defaultHandlePermissionDenied(String[] permissions) {
+    public void handlePermissionDenied(String[] permissions) {
         if(permissions == null || permissions.length == 0) {
             return;
         }

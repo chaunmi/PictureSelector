@@ -269,17 +269,6 @@ public final class PictureSelectionSystemModel {
     }
 
     /**
-     *  Permission denied
-     *
-     * @param listener
-     * @return
-     */
-    public PictureSelectionSystemModel setPermissionDeniedListener(OnPermissionDeniedListener listener) {
-        PictureSelectionConfig.onPermissionDeniedListener = listener;
-        return this;
-    }
-
-    /**
      * Custom limit tips
      *
      * @param listener

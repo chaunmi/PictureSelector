@@ -511,31 +511,7 @@ public class PictureSelectorFragment extends PictureCommonFragment
     }
 
     @Override
-    public void handlePermissionSettingResult(String[] permissions) {
-        if (permissions == null || permissions.length == 0){
-            return;
-        }
-        boolean isHasCamera = permissions.length > 0 && TextUtils.equals(permissions[0], PermissionConfig.CAMERA[0]);
-        boolean isHasPermissions;
-        if (PictureSelectionConfig.onPermissionsEventListener != null) {
-            isHasPermissions = PictureSelectionConfig.onPermissionsEventListener.hasPermissions(this, permissions);
-        } else {
-            isHasPermissions = PermissionChecker.isCheckSelfPermission(getContext(), permissions);
-        }
-        if (isHasPermissions) {
-            if (isHasCamera) {
-                openSelectedCamera();
-            } else {
-                beginLoadData();
-            }
-        } else {
-            defaultHandlePermissionDenied(permissions);
-        }
-        PermissionConfig.CURRENT_REQUEST_PERMISSION = new String[]{};
-    }
-
-    @Override
-    protected void defaultHandlePermissionDenied(String[] permissions) {
+    public void handlePermissionDenied(String[] permissions) {
         if(permissions == null || permissions.length == 0) {
             return;
         }
@@ -547,7 +523,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
             onKeyBackFragmentFinish();
         }
     }
-
     /**
      * 给AlbumListPopWindow添加事件
      */

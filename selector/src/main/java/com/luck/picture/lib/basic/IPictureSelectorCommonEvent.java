@@ -52,11 +52,6 @@ public interface IPictureSelectorCommonEvent {
     void reStartSavedInstance(Bundle savedInstanceState);
 
     /**
-     * 权限设置结果
-     */
-    void handlePermissionSettingResult(String[] permissions);
-
-    /**
      * 设置app语言
      */
     void initAppLanguage();
